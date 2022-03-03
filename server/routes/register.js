@@ -15,10 +15,6 @@ app.set('view engine', 'ejs');
 //회원가입
 const register = async (req,res,next)=>{
     console.log(req.body);
-    
-    console.log(process.env.EMAIL === 'bogil20050125@gmail.com');
-    console.log(process.env.EMAIL);
-
 
     const param = [req.body.id, req.body.pw, req.body.nickname, req.body.email];
     //아이디 중복 검사
@@ -34,9 +30,11 @@ const register = async (req,res,next)=>{
             return res.status(401).json({ success: false, errormessage: '닉네임이 입력되지 않았습니다.' });
         }
 
-        db.query('SELECT * FROM member WHERE id=?', param[0], (err,row) => {
-            if(row.length === 0){
-                console.log("아이디 사용가능");
+        db.query('SELECT * FROM member WHERE id=?', param[0], (err, row) => {
+            db.query('SELECT * FROM member WHERE nickname=?', param[2], (err, row_name)=>{
+
+            if(row.length === 0 && row_name === 0){
+                console.log("아이디 & 닉네임 사용가능");
                 bcrypt.hash(param[1], saltRounds, (err, hash)=>{
                     param[1] = hash;
                     db.query('INSERT INTO member (`id`, `pw`, `nickname`, `email`) VALUES (?, ?, ?, ?)', param, (err, row)=>{
@@ -47,11 +45,18 @@ const register = async (req,res,next)=>{
                         res.end();
                 })       
             })
-            }else {
+            }else if(row.length !== 0 && row_name.length === 0){
                 res.status(401).json({ success: false, errormessage: '중복된 아이디 입니다.' });//아이디 중복
                 console.log("중복 된 아이디");
+
+            }else if(row.length === 0 && row_name.length !== 0){
+                res.status(401).json({ success: false, errormessage: '중복된 닉네임 입니다.' });//닉네임 중복
+                console.log("중복 된 닉네임");
+            }else{
+                console.log('아이디, 닉네임 모두 중복입니다.')
             }
         })
+    })
         }catch(err){
             console.log(err);
     }
