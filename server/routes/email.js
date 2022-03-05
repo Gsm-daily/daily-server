@@ -50,7 +50,7 @@ const authNumberCompare = async(req,res) => {
 
     if(parseInt(auth_number) === authNumber){
         console.log('인증 완료!');
-        res.status(200)
+        res.status(200);
     }else{
         console.log("비밀번호 틀림");
     }
