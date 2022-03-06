@@ -1,6 +1,8 @@
 const nodemailer = require('nodemailer');
 const express = require('express');
+const { promise, reject } = require('bcrypt/promises');
 const router = express.Router();
+require('dotenv').config();
 
 const authNumber = Math.floor(Math.random() * 100000 ) + 1;
 
@@ -35,18 +37,35 @@ router.post('/auth', async (req, res)=>{
             console.log(info);
             console.log('success!');
         })
-
-        module.exports = {receiverEmail};
-
     }catch(err){
         console.log(err);
     }
+
+    email123(receiverEmail);
+
+
+    //프로미스로 이메일 보내야 함
+
+    
 })
 
+function email123(receiverEmail){
+    // return new Promise((resolve, reject)=>{
+    //     resolve(receiverEmail);
+    //     console.log(receiverEmail);
+    // })
+    console.log(receiverEmail);
+}
+// email.then((email)=>{
+//     console.log(email)
+// })
 
 const authNumberCompare = async(req,res) => {
 
     const auth_number = req.body.auth_number;
+
+   //console.log(email);
+
 
     if(parseInt(auth_number) === authNumber){
         console.log('인증 완료!');
@@ -60,4 +79,3 @@ router.post('/auth/compare', authNumberCompare);
 
 
 module.exports = router;
-module.exports = {receiverEmail, authNumberCompare};
