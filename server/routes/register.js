@@ -6,6 +6,7 @@ const bcrypt = require('bcrypt');
 const { application } = require('express');
 const saltRounds = 10;
 const app = express();
+const { receiverEmail } = require('./email'); 
 
 require('dotenv').config();
 
@@ -16,7 +17,7 @@ const register = async (req,res,next)=>{
         
     const param = [req.body.id, req.body.pw, req.body.nickname, req.body.email];
     //아이디 중복 검사
-    console.log(param[3]);
+    console.log(receiverEmail);
 
     try{
 
