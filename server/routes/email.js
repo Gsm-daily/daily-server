@@ -41,36 +41,31 @@ router.post('/auth', async (req, res)=>{
         console.log(err);
     }
 
-    email123(receiverEmail);
-
-
-    //프로미스로 이메일 보내야 함
-
-    
+    email(req.body.email);
+  
 })
 
-function email123(receiverEmail){
-    // return new Promise((resolve, reject)=>{
-    //     resolve(receiverEmail);
-    //     console.log(receiverEmail);
-    // })
-    console.log(receiverEmail);
-}
-// email.then((email)=>{
-//     console.log(email)
-// })
 
-const authNumberCompare = async(req,res) => {
 
+async function authNumberCompare(req, res) {
+
+    function email(email){
+        return new Promise((resolve, reject)=>{
+            resolve(email);
+            // if(email.length > 0){
+            //     console.log(email)
+            // }
+        })
+    }
+    
     const auth_number = req.body.auth_number;
+    const email = email();
 
-   //console.log(email);
 
-
-    if(parseInt(auth_number) === authNumber){
+    if (parseInt(auth_number) === authNumber) {
         console.log('인증 완료!');
         res.status(200);
-    }else{
+    } else {
         console.log("비밀번호 틀림");
     }
 }
