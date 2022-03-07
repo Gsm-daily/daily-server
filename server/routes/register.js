@@ -17,7 +17,7 @@ const register = async (req,res,next)=>{
         
     const param = [req.body.id, req.body.pw, req.body.nickname, req.body.email];
     //아이디 중복 검사
-    console.log(receiverEmail);
+    
 
     try{
 
@@ -34,7 +34,7 @@ const register = async (req,res,next)=>{
         db.query('SELECT * FROM member WHERE id=?', param[0], (err, row) => {
             db.query('SELECT * FROM member WHERE nickname=?', param[2], (err, row_name)=>{
 
-            if(row.length === 0 && row_name === 0){
+            if(row.length === 0 && row_name.length === 0){
                 console.log("아이디 & 닉네임 사용가능");
                 bcrypt.hash(param[1], saltRounds, (err, hash)=>{
                     param[1] = hash;
@@ -53,7 +53,8 @@ const register = async (req,res,next)=>{
             }else if(row.length === 0 && row_name.length !== 0){
                 res.status(401).json({ success: false, errormessage: '중복된 닉네임 입니다.' });//닉네임 중복
                 console.log("중복 된 닉네임");
-            }else{
+
+            }else if(row.length !== 0 && row_name.length !== 0){
                 console.log('아이디, 닉네임 모두 중복입니다.')
                 res.status(401);
             }
@@ -62,6 +63,8 @@ const register = async (req,res,next)=>{
         }catch(err){
             console.log(err);
     }
+
+  
 }
 
 // //인증번호 발급
