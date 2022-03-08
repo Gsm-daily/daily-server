@@ -15,7 +15,7 @@ app.set('view engine', 'ejs');
 //회원가입
 const register = async (req,res,next)=>{
         
-    const param = [req.body.id, req.body.pw, req.body.nickname, req.body.email];
+    const param = [req.body.id, req.body.pw, req.body.nickname];
     //아이디 중복 검사
     
 
@@ -31,14 +31,14 @@ const register = async (req,res,next)=>{
         //     return res.status(401).json({ success: false, errormessage: '닉네임이 입력되지 않았습니다.' });
         // }
 
-        db.query('SELECT * FROM member WHERE id=?', param[0], (err, row) => {
-            db.query('SELECT * FROM member WHERE nickname=?', param[2], (err, row_name)=>{
+        db.query('SELECT * FROM test1 WHERE id=?', param[0], (err, row) => {
+            db.query('SELECT * FROM test1 WHERE nickname=?', param[2], (err, row_name)=>{
 
             if(row.length === 0 && row_name.length === 0){
                 console.log("아이디 & 닉네임 사용가능");
                 bcrypt.hash(param[1], saltRounds, (err, hash)=>{
                     param[1] = hash;
-                    db.query('INSERT INTO member (`id`, `pw`, `nickname`, `email`) VALUES (?, ?, ?, ?)', param, (err, row)=>{
+                    db.query('UPDATE test1 SET id=?, pw=?, nickname=? WHERE id IS NULL AND pw IS NULL AND nickname IS NULL', param, (err, row)=>{
                         if(err) console.log(err);
                         console.log('db에 저장됨');
                         console.log('회원가입 완료');
@@ -63,71 +63,11 @@ const register = async (req,res,next)=>{
         }catch(err){
             console.log(err);
     }
-
-  
 }
-
-// //인증번호 발급
-// const authNumber = Math.floor(Math.random() * 100000 ) + 1;
-
-// //이메일 인증
-// const mail = async (req, res)=>{
-
-//     const receiverEmail = req.body.email;
-
-//     try{
-
-//         const transport = nodemailer.createTransport({
-//             service: "Gmail",
-//             auth: {
-//                 user: process.env.EMAIL,
-//                 pass: process.env.EMAIL_PW,
-//             },
-//         });
-
-//         const mailOptions = {
-//             from : process.env.EMAIL,
-//             to : receiverEmail,
-//             subject : "test",
-//             text: '오른쪽 인증번호를 입력해주세요 ' + authNumber,
-//         };
-
-//         transport.sendMail(mailOptions, (error, info) => {
-//             if(error){
-//                 console.log(error);
-//                 return;
-//             }
-            
-//             console.log(info);
-//             console.log('success!');
-//         })
-
-//         module.exports = {receiverEmail};
-
-//     }catch(err){
-//         console.log(err);
-//     }
-// }
-
-// const authNumberCompare = async(req,res) => {
-
-//     const auth_number = req.body.auth_number;
-
-//     if(parseInt(auth_number) === authNumber){
-//         console.log('인증 완료!');
-//         res.status(200)
-//     }else{
-//         console.log("비밀번호 틀림");
-//     }
-// }
-
-
 
 router.get('/register', (req,res)=>{
     res.render("test.ejs");
 })
 router.post('/register', register);
-// router.post('/auth', mail);
-// router.post('/auth/compare', authNumberCompare);
 
 module.exports = router;
