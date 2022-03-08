@@ -17,7 +17,7 @@ router.get('/login',(req,res,next)=>{
 router.post('/login', (req, res, next) => {
     param1 = [req.body.id, req.body.pw];
 
-    db.query('SELECT * FROM member WHERE id=?', param1[0], (err, row) => {
+    db.query('SELECT * FROM test1 WHERE id=?', param1[0], (err, row) => {
         if (err) console.log(err);
 
         if (row.length > 0) {
