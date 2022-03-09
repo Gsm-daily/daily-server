@@ -43,7 +43,7 @@ const register = async (req,res,next)=>{
                         console.log('db에 저장됨');
                         console.log('회원가입 완료');
                         res.status(200);
-                        res.end();
+                        res.redirect('/user/login');
                 })       
             })
             }else if(row.length !== 0 && row_name.length === 0){
