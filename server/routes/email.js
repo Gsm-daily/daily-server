@@ -35,7 +35,7 @@ router.post('/auth', async (req, res)=>{
             };
     
             transport.sendMail(mailOptions, (error, info) => {
-                if(error){
+                if (error) {
                     console.log(error);
                 }
                 // console.log(info);
@@ -46,7 +46,9 @@ router.post('/auth', async (req, res)=>{
                 console.log(receiverEmail + " 이메일 db에 저장 완료");
             });
             
-            //res.redirect('/user/register');
+            //프론트에 이메일 값을 보내고 text박스에 저장
+            res.redirect('/user/register', receiverEmail);
+
         }catch(err){
             console.log(err);
         }
@@ -63,6 +65,7 @@ const authNumberCompare = ((req, res)=>{
 
     } else {
         console.log("비밀번호 틀림");
+
     }
 }) 
 
